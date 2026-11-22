@@ -442,10 +442,27 @@ async function startServer() {
     });
 
     app.use(vite.middlewares);
+  } else {
+    // In production, serve the Vite build from /dist.
+    // API routes are registered above this block, so they remain available.
+    const distDir = path.resolve(process.cwd(), 'dist');
+
+    app.use(express.static(distDir));
+
+    // React Router / SPA fallback: send index.html for frontend routes.
+    app.get('*', (req: Request, res: Response, next: NextFunction) => {
+      if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ error: 'API route not found' });
+      }
+
+      res.sendFile(path.join(distDir, 'index.html'), (err) => {
+        if (err) next(err);
+      });
+    });
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`EduPrep AI API running on port ${PORT}`);
+    console.log(`EduPrep AI server running on port ${PORT}`);
   });
 }
 
