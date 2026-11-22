@@ -24,6 +24,36 @@ const app = express();
 app.disable('x-powered-by');
 app.use(express.json({ limit: '4mb' }));
 
+// CORS configuration
+const allowedOrigins = (
+  process.env.FRONTEND_ORIGIN || ''
+)
+  .split(',')
+  .map(origin => origin.trim());
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, POST, OPTIONS'
+    );
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization'
+    );
+  }
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 // Security headers (iframe-compatible in AI Studio)
 app.use((_req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
