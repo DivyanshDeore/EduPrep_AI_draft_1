@@ -433,6 +433,7 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 
+
 async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
@@ -456,6 +457,7 @@ if (!process.env.VERCEL) {
     process.exit(1);
   });
 }
+
 
 if (!process.env.VERCEL) {
   startServer();
