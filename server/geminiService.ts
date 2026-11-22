@@ -1,6 +1,13 @@
 import { GoogleGenAI, Type } from '@google/genai';
 
 export const CHAT_MODELS = [
+    {
+    id: 'gemini-2.5-flash',
+    label: 'Gemini 2.5 Flash',
+    subtitle: 'Fast Tasks - Balanced Performance',
+    description: 'Fast and capable model for academic Q&A, study notes, summaries, and tutoring.',
+    tier: 'standard' as const,
+  },
   {
     id: 'gemini-4-hydrogen',
     label: 'Gemini 4 Hydrogen',
