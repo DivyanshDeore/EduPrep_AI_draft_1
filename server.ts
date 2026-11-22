@@ -458,7 +458,3 @@ if (!process.env.VERCEL) {
   });
 }
 
-
-if (!process.env.VERCEL) {
-  startServer();
-}
