@@ -1,0 +1,281 @@
+{
+  "entities": {
+    "Student": {
+      "title": "Student",
+      "description": "Authenticated student profile and workspace settings (PII isolated to owner).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 254 },
+        "fullName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "institution": { "type": "string", "maxLength": 160 },
+        "program": { "type": "string", "maxLength": 160 },
+        "academicTerm": { "type": "string", "maxLength": 80 },
+        "dailyGoal": { "type": "number" },
+        "preferredModel": { "type": "string", "maxLength": 80 },
+        "themeMode": { "type": "string", "enum": ["light", "dark", "system"] },
+        "photoUrl": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "fullName", "themeMode", "createdAt", "updatedAt"]
+    },
+    "NotificationPreference": {
+      "title": "NotificationPreference",
+      "description": "Student notification and reminder lead-time configuration.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "leadMinutes": { "type": "number" },
+        "inAppEnabled": { "type": "boolean" },
+        "browserEnabled": { "type": "boolean" },
+        "focusStart": { "type": "string", "maxLength": 10 },
+        "focusEnd": { "type": "string", "maxLength": 10 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "leadMinutes", "inAppEnabled", "browserEnabled", "updatedAt"]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Academic course or subject owned by a student.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "code": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "instructor": { "type": "string", "maxLength": 120 },
+        "credits": { "type": "number" },
+        "description": { "type": "string", "maxLength": 2000 },
+        "syllabusId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "code", "title", "createdAt", "updatedAt"]
+    },
+    "Topic": {
+      "title": "Topic",
+      "description": "Ordered syllabus topic belonging to a student subject.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "syllabusId": { "type": "string", "maxLength": 128 },
+        "orderIndex": { "type": "number" },
+        "weekNumber": { "type": "number" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "completed"] },
+        "keyConcepts": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "subjectId", "orderIndex", "title", "status", "createdAt", "updatedAt"]
+    },
+    "Syllabus": {
+      "title": "Syllabus",
+      "description": "Uploaded and extracted syllabus record.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "fileName": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "fileType": { "type": "string", "enum": ["pdf", "txt", "docx", "pasted"] },
+        "fileSize": { "type": "number" },
+        "extractedText": { "type": "string", "maxLength": 120000 },
+        "parsedTopicCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "subjectId", "fileName", "fileType", "fileSize", "extractedText", "parsedTopicCount", "createdAt"]
+    },
+    "TimetableEntry": {
+      "title": "TimetableEntry",
+      "description": "Weekly class schedule entry owned by a student.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectCode": { "type": "string", "maxLength": 32 },
+        "subjectTitle": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "dayOfWeek": { "type": "number" },
+        "startTime": { "type": "string", "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$" },
+        "endTime": { "type": "string", "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$" },
+        "room": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "instructor": { "type": "string", "maxLength": 120 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "subjectId", "subjectTitle", "dayOfWeek", "startTime", "endTime", "room", "createdAt", "updatedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Smart class reminder notification record.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "timetableEntryId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectTitle": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "classTime": { "type": "string", "maxLength": 40 },
+        "room": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "occurrenceKey": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "timetableEntryId", "subjectId", "subjectTitle", "classTime", "title", "message", "occurrenceKey", "isRead", "createdAt"]
+    },
+    "PreCap": {
+      "title": "PreCap",
+      "description": "AI-assisted lecture preparation guide for an upcoming class and topic.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "topicId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "timetableEntryId": { "type": "string", "maxLength": 128 },
+        "subjectTitle": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "topicTitle": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "lectureDetails": { "type": "string", "maxLength": 240 },
+        "introduction": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "concepts": { "type": "array" },
+        "definitions": { "type": "array" },
+        "prerequisites": { "type": "array" },
+        "questions": { "type": "array" },
+        "suggestedResources": { "type": "array" },
+        "aiAssisted": { "type": "boolean" },
+        "modelUsed": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "subjectId", "topicId", "subjectTitle", "topicTitle", "introduction", "concepts", "definitions", "prerequisites", "questions", "aiAssisted", "createdAt", "updatedAt"]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "Structured AI-assisted study notes for a subject and topic.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "topicId": { "type": "string", "maxLength": 128 },
+        "subjectTitle": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "topicTitle": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "introduction": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "importantConcepts": { "type": "array" },
+        "detailedExplanations": { "type": "string", "minLength": 1, "maxLength": 25000 },
+        "keyDefinitions": { "type": "array" },
+        "examples": { "type": "array" },
+        "importantPoints": { "type": "array" },
+        "conclusion": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "aiAssisted": { "type": "boolean" },
+        "modelUsed": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "subjectId", "subjectTitle", "topicTitle", "title", "introduction", "importantConcepts", "detailedExplanations", "keyDefinitions", "examples", "importantPoints", "conclusion", "aiAssisted", "createdAt", "updatedAt"]
+    },
+    "Summary": {
+      "title": "Summary",
+      "description": "Concise AI-assisted study summary derived from saved notes or study material.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "noteId": { "type": "string", "maxLength": 128 },
+        "subjectId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "sourceLabel": { "type": "string", "maxLength": 200 },
+        "summaryText": { "type": "string", "minLength": 1, "maxLength": 15000 },
+        "keyTakeaways": { "type": "array" },
+        "aiAssisted": { "type": "boolean" },
+        "modelUsed": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "title", "summaryText", "keyTakeaways", "aiAssisted", "createdAt", "updatedAt"]
+    },
+    "Resource": {
+      "title": "Resource",
+      "description": "Saved grounded learning resource link.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectId": { "type": "string", "maxLength": 128 },
+        "topicId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "source": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "resourceType": { "type": "string", "enum": ["youtube", "documentation", "tutorial", "article", "open_course"] },
+        "url": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "isGrounded": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "title", "source", "resourceType", "url", "isGrounded", "createdAt"]
+    },
+    "ChatSession": {
+      "title": "ChatSession",
+      "description": "Multi-turn Gemini Chatbot conversation with role system instruction and model selection.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "model": { "type": "string", "enum": ["gemini-4-carbon", "gemini-4-neon", "gemini-4-hydrogen", "gemini-3.1-flash-lite"] },
+        "systemInstruction": { "type": "string", "maxLength": 2500 },
+        "messages": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "title", "model", "messages", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/students/{studentId}": {
+      "schema": { "$ref": "#/entities/Student" },
+      "description": "Student profile documents (PII isolated to owner UID)."
+    },
+    "/notificationPreferences/{studentId}": {
+      "schema": { "$ref": "#/entities/NotificationPreference" },
+      "description": "Per-student class reminder preferences."
+    },
+    "/subjects/{subjectId}": {
+      "schema": { "$ref": "#/entities/Subject" },
+      "description": "Academic subjects owned by students."
+    },
+    "/topics/{topicId}": {
+      "schema": { "$ref": "#/entities/Topic" },
+      "description": "Ordered syllabus topics linked to student subjects."
+    },
+    "/syllabi/{syllabusId}": {
+      "schema": { "$ref": "#/entities/Syllabus" },
+      "description": "Uploaded and parsed syllabus documents."
+    },
+    "/timetableEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/TimetableEntry" },
+      "description": "Weekly timetable class entries."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "Class reminder notifications."
+    },
+    "/precaps/{precapId}": {
+      "schema": { "$ref": "#/entities/PreCap" },
+      "description": "AI-assisted lecture preparation guides."
+    },
+    "/notes/{noteId}": {
+      "schema": { "$ref": "#/entities/Note" },
+      "description": "Structured AI-assisted study notes."
+    },
+    "/summaries/{summaryId}": {
+      "schema": { "$ref": "#/entities/Summary" },
+      "description": "AI-assisted study summaries."
+    },
+    "/resources/{resourceId}": {
+      "schema": { "$ref": "#/entities/Resource" },
+      "description": "Saved educational learning resources."
+    },
+    "/chatSessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/ChatSession" },
+      "description": "Persistent multi-turn Gemini chatbot sessions owned by students."
+    }
+  }
+}

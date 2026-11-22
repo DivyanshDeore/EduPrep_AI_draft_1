@@ -1,0 +1,6 @@
+{
+  "name": "EduPrep AI",
+  "description": "AI-powered smart academic assistant for timetables, syllabus parsing, lecture pre-caps, study notes, summaries, and grounded learning resources.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

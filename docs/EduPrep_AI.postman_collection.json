@@ -1,0 +1,144 @@
+{
+  "info": {
+    "name": "EduPrep AI API",
+    "description": "Server-side AI & Syllabus Ingestion REST endpoints for EduPrep AI.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "health"]
+        }
+      }
+    },
+    {
+      "name": "AI Configuration Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/ai/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ai", "status"]
+        }
+      }
+    },
+    {
+      "name": "Parse Syllabus (Raw Text)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fileName\": \"cs314-syllabus.txt\",\n  \"rawText\": \"CS 314 Distributed Systems\\nInstructor: Prof. M. Rosenblum\\nWeek 1: Logical Clocks & Causal Ordering\\nWeek 2: Raft Consensus & Leader Election\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/syllabus/parse",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "syllabus", "parse"]
+        }
+      }
+    },
+    {
+      "name": "Generate Study Notes",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"subjectCode\": \"CS 314\",\n  \"subjectTitle\": \"Distributed Systems\",\n  \"topicTitle\": \"Raft Consensus & Leader Election\",\n  \"topicDescription\": \"Replicated state machines and leader election safety invariants.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/ai/notes",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ai", "notes"]
+        }
+      }
+    },
+    {
+      "name": "Generate Study Summary",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Raft Consensus Notes\",\n  \"focusMode\": \"exam\",\n  \"sourceText\": \"Raft separates consensus into leader election, log replication, and safety. Each server operates in one of three states: leader, follower, or candidate...\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/ai/summary",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ai", "summary"]
+        }
+      }
+    },
+    {
+      "name": "Generate Lecture Pre-Cap",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"subjectCode\": \"CS 314\",\n  \"subjectTitle\": \"Distributed Systems\",\n  \"topicTitle\": \"Raft Consensus & Leader Election\",\n  \"lectureDetails\": \"Tuesday 10:30 AM - 12:00 PM · Gates B12\",\n  \"includeResources\": true\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/ai/precap",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ai", "precap"]
+        }
+      }
+    },
+    {
+      "name": "Search Grounded Learning Resources",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"subjectTitle\": \"Distributed Systems\",\n  \"topicTitle\": \"Raft Consensus\",\n  \"query\": \"lecture visualization\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/ai/resources",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ai", "resources"]
+        }
+      }
+    }
+  ]
+}
